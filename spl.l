@@ -1,3 +1,11 @@
+%{
+#ifdef PRINT
+#define TOKEN(t) printf("Token: " #t "\n");
+#else
+#define TOKEN(t) return(t);
+#endif
+%}
+
 delim           [ \t\r]
 ws              {delim}+
 character      	[A-Za-z]
@@ -8,39 +16,37 @@ number          {digit}+
 
 				int k;
 {ws}            ; /* Do Nothing */
-{id}			printf("identifier: %s\n",yytext);
-\n              printf("binaryOp: NEWLINE\n");
-"+"             printf("binaryOp: PLUS\n");
-"-"				printf("binaryOp: MINUS\n");
-"*"             printf("binaryOp: TIMES\n");
-"/"				printf("binaryOp: DIVIDE\n");
-"<"             printf("relop: LT\n");
-">"             printf("relop: GT\n");
-";"             printf("separator: SEMICOLON\n");
-"->"			printf("separator: ASSIGNMENT\n");
-"("             printf("keyword: BRA\n");
-")"             printf("keyword: KET\n");
-"'"				printf("separator: APOS\n");
-":="			printf("assignment\n");
+\n              TOKEN(NEWLINE);
+"+"             TOKEN(PLUS);
+"-"				TOKEN(MINUS);
+"*"             TOKEN(TIMES);
+"/"				TOKEN(DIVIDE);
+"<"             TOKEN(LT);
+">"             TOKEN(GT);
+";"             TOKEN(SEMICOLON);
+"->"			TOKEN(ASSIGNMENT);
+"("             TOKEN(BRA);
+")"             TOKEN(KET);
+"'"				TOKEN(APOS);
+":="			TOKEN(ASSIGN);
 
-IF             	printf("keyword: IF\n");
-ENDIF           printf("keyword: ENDIF\n");
-THEN           	printf("keyword: THEN\n");
-ELSE           	printf("keyword: ELSE\n");
-WHILE           printf("keyword: WHILE\n");
-ENDWHILE        printf("keyword: ENDWHILE\n");
-DO             	printf("keyword: DO\n");
-ENDDO           printf("keyword: ENDDO\n");
-FOR           	printf("keyword: FOR\n");
-ENDFOR          printf("keyword: ENDFOR\n");
-WRITE			printf("keyword: WRITE\n");
-READ			printf("keyword: READ\n");
-THEN			printf("keyword: THEN\n");
-AND				printf("keyword: AND\n");
-OR				printf("keyword: OR\n");
-NOT				printf("keyword: NOT\n");
+IF             	TOKEN(IF);
+ENDIF           TOKEN(ENDIF);
+THEN           	TOKEN(THEN);
+ELSE           	TOKEN(ELSE);
+WHILE           TOKEN(WHILE);
+ENDWHILE        TOKEN(ENDWHILE);
+DO             	TOKEN(DO);
+ENDDO           TOKEN(ENDDO);
+FOR           	TOKEN(FOR);
+ENDFOR          TOKEN(ENDFOR);
+WRITE			TOKEN(WRITE);
+READ			TOKEN(READ);
+AND				TOKEN(AND);
+OR				TOKEN(OR);
+NOT				TOKEN(NOT);
 
 {number}        {
                   k = atoi(yytext) ;
-                  printf("number: %d\n", k);
+                  TOKEN(NUMBER);
                 }
