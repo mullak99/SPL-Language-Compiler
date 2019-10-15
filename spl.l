@@ -1,8 +1,12 @@
 %{
 #ifdef PRINT
 #define TOKEN(t) printf("Token: " #t "\n");
+#define NUMBER_TOKEN(t) printf("Number %d Token: " #t "\n", atoi(yytext));
+#define ID_TOKEN(t) printf("ID %s Token: " #t "\n", yytext);
 #else
 #define TOKEN(t) return(t);
+#define NUMBER_TOKEN(t) yylval.iVal = atoi(yytext); return(t);
+#define ID_TOKEN(t) return(t);
 #endif
 %}
 
@@ -16,6 +20,7 @@ number          {digit}+
 
 				int k;
 {ws}            ; /* Do Nothing */
+{id}            ID_TOKEN(ID);
 \n              TOKEN(NEWLINE);
 "+"             TOKEN(PLUS);
 "-"				TOKEN(MINUS);
@@ -54,5 +59,5 @@ NOT				TOKEN(NOT);
 
 {number}        {
                   k = atoi(yytext) ;
-                  TOKEN(NUMBER);
+                  NUMBER_TOKEN(NUMBER);
                 }
