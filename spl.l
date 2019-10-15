@@ -23,12 +23,18 @@ number          {digit}+
 "/"				TOKEN(DIVIDE);
 "<"             TOKEN(LT);
 ">"             TOKEN(GT);
+"<>"			TOKEN(GET);
+":" 	      	TOKEN(COLON);
 ";"             TOKEN(SEMICOLON);
 "->"			TOKEN(ASSIGNMENT);
 "("             TOKEN(BRA);
 ")"             TOKEN(KET);
 "'"				TOKEN(APOS);
 ":="			TOKEN(ASSIGN);
+"." 			TOKEN(FULL);
+"," 			TOKEN(COMMA);
+"=>"			TOKEN(GORE);
+"=<"			TOKEN(LORE);
 
 IF             	TOKEN(IF);
 ENDIF           TOKEN(ENDIF);
