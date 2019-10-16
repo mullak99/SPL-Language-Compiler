@@ -18,9 +18,9 @@ id			    {character}({character}|{digit})*
 number          {digit}+
 %%
 
-				int k;
 {ws}            ; /* Do Nothing */
 {id}            ID_TOKEN(ID);
+{number}		NUMBER_TOKEN(NUMBER);
 \n              TOKEN(NEWLINE);
 "+"             TOKEN(PLUS);
 "-"				TOKEN(MINUS);
@@ -56,8 +56,3 @@ READ			TOKEN(READ);
 AND				TOKEN(AND);
 OR				TOKEN(OR);
 NOT				TOKEN(NOT);
-
-{number}        {
-                  k = atoi(yytext) ;
-                  NUMBER_TOKEN(NUMBER);
-                }
