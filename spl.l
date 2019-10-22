@@ -22,7 +22,7 @@ char_const      '{character}'
 %%
 
 {ws}            ; /* Do Nothing */
-\n              TOKEN(NEWLINE);
+\n              ; /* Do Nothing */
 "+"             TOKEN(PLUS);
 "-"				TOKEN(MINUS);
 "*"             TOKEN(TIMES);
@@ -41,6 +41,7 @@ char_const      '{character}'
 "," 			TOKEN(COMMA);
 "=>"			TOKEN(GORE);
 "=<"			TOKEN(LORE);
+"NEWLINE" 		TOKEN(NEWLINE);
 
 IF             	TOKEN(IF);
 ENDIF           TOKEN(ENDIF);
@@ -57,6 +58,8 @@ OR				TOKEN(OR);
 NOT				TOKEN(NOT);
 WRITE        	TOKEN(WRITE);
 READ			TOKEN(READ);
+CODE			TOKEN(CODE);
+ENDP			TOKEN(ENDP)
 
 {id}            ID_TOKEN(ID);
 {char_const}    CHAR_TOKEN(CHAR_CONST);
