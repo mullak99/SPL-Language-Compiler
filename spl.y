@@ -1,55 +1,54 @@
-%token NEWLINE PLUS TIMES MINUS DIVIDE BRA KET COLON SEMICOLON COMMA EQUALS GET LT GT LORE GORE FULL APOS ASSIGNMENT IF ELSE ENDIF ENDDO DO WHILE ENDWHILE FOR ENDFOR WRITE READ AND OR NOT ENDP CODE
-
+%token TYPE char_const declaration_block id NEWLINE PLUS TIMES MINUS DIVIDE BRA KET COLLON SEMICOLON COMMA CAST EQUALS GET LT GT GORE FULL APOS ASSIGNMENT IF ELSE ENDIF ENDDO DO WHILE ENDWHILE FOR ENDFOR WRITE READ AND OR NOT BY CODE ENDP LORE INTEGER DECLARATIONS IS OF REAL THEN TO 
+%token CHARACTER 
+%token NUMBER 
 %%
-program : id COLON block ENDP id FULL
 
-block : DECLARATIONS declaration_block CODE statement_list | CODE statement_list
+program : id COLLON block ENDP id FULL;
 
-declaration : variables OF Type type COLON | variables OF Type type COLON declaration_block
-variables : id | id COMMA variables
+block : DECLARATIONS declaration_block CODE statement_list | CODE statement_list;
 
-type: CHARACTER | INTEGER | REAL
+declaration : variables OF TYPE type SEMICOLON | variables OF TYPE type SEMICOLON declaration_block;
 
-statement_list : statement | statement SEMICOLON statement_list
+variables : id | id COMMA variables;
 
-statement : assignment_statement | if_statement | do_statement | while_statement | for_statement | write_statement | read_statement
+type: CHARACTER | INTEGER | REAL;
 
-assignment_statement  : expression ASSIGNMENT id
+statement_list : statement | statement SEMICOLON statement_list;
 
-if_statement : IF conditional THEN statement_list ELSE statement_list ENDIF | IF conditional THEN statement_list ENDIF
+statement : assignment_statement | if_statement | do_statement| while_statement | for_statement | write_statement | read_statement;
 
-do_statement : DO statement_list WHILE conditional ENDDO
+assignment_statement : expression CAST id;
 
-while_statement : WHILE conditional DO statement_list ENDWHILE
+if_statement : IF conditional THEN statement_list ELSE statement_list ENDIF | IF conditional THEN statement_list ENDIF;
 
-for_statement : FOR id IS expression BY expression TO expression TO expression DO statement_list ENDFOR
+do_statement : DO statement_list WHILE conditional ENDDO;
 
-write_statement : WRITE BRA id KET | NEWLINE WRITE BRA id KET
+while_statement : WHILE conditional DO statement_list ENDWHILE;
 
-read_statement : READ BRA id KET
+for_statement : FOR id IS expression BY expression TO expression TO expression DO statement_list ENDFOR;
 
-output_list : value |value COMMA output_list
+write_statement : WRITE BRA id KET | NEWLINE WRITE BRA id KET;
+
+read_statement : READ BRA id KET;
+
+output_list : value |value COMMA output_list;
 
 conditional : expression comparator expression
 			| expression comparator expression AND conditional
 			| expression comparator expression OR conditional
-			| NOT conditional
+			| NOT conditional;
 
-comparator : EQUALS | GET | LT | GT | GORE | LORE
+comparator : EQUALS | GET | LT | GT | GORE | LORE;
 
-expression : term | term PLUS expression | term MINUS expression
+expression : term |term PLUS expression | term MINUS expression;
 
-term : value | value TIMES term | value DIVIDE term
+term : value | value TIMES term | value DIVIDE term;
 
-value : id | constant | BRA expression KET
+value : id | constant | BRA expression KET;
 
-constant : number_constant | character_constant
+constant : number_constant | char_const;
 
-charater_constant : APOS character APOS
+charater_constant : APOS CHARACTER APOS;
 
-number_constant : number | MINUS number | MINUS number FULL number | number FULL number
-
-number : digit | number digit
-
-id : character | id character | id digit
+number_constant : NUMBER | MINUS NUMBER | MINUS NUMBER FULL NUMBER | NUMBER FULL NUMBER;
 
