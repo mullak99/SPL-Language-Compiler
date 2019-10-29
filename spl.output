@@ -1,0 +1,1402 @@
+Nonterminals useless in grammar
+
+   declaration
+   variables
+   type
+   output_list
+
+
+Terminals unused in grammar
+
+   TYPE
+   COMMA
+   APOS
+   ASSIGNMENT
+   INTEGER
+   OF
+   REAL
+   CHARACTER
+
+
+Rules useless in grammar
+
+   47 declaration: variables OF TYPE type SEMICOLON
+   48            | variables OF TYPE type SEMICOLON declaration_block
+
+   49 variables: id
+   50          | id COMMA variables
+
+   51 type: CHARACTER
+   52     | INTEGER
+   53     | REAL
+
+   54 output_list: value
+   55            | value COMMA output_list
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: id COLON block ENDP id FULL
+
+    2 block: DECLARATIONS declaration_block CODE statement_list
+    3      | CODE statement_list
+
+    4 statement_list: statement
+    5               | statement SEMICOLON statement_list
+
+    6 statement: assignment_statement
+    7          | if_statement
+    8          | do_statement
+    9          | while_statement
+   10          | for_statement
+   11          | write_statement
+   12          | read_statement
+
+   13 assignment_statement: expression CAST id
+
+   14 if_statement: IF conditional THEN statement_list ELSE statement_list ENDIF
+   15             | IF conditional THEN statement_list ENDIF
+
+   16 do_statement: DO statement_list WHILE conditional ENDDO
+
+   17 while_statement: WHILE conditional DO statement_list ENDWHILE
+
+   18 for_statement: FOR id IS expression BY expression TO expression TO expression DO statement_list ENDFOR
+
+   19 write_statement: WRITE BRA id KET
+   20                | NEWLINE WRITE BRA id KET
+
+   21 read_statement: READ BRA id KET
+
+   22 conditional: expression comparator expression
+   23            | expression comparator expression AND conditional
+   24            | expression comparator expression OR conditional
+   25            | NOT conditional
+
+   26 comparator: EQUALS
+   27           | GET
+   28           | LT
+   29           | GT
+   30           | GORE
+   31           | LORE
+
+   32 expression: term
+   33           | term PLUS expression
+   34           | term MINUS expression
+
+   35 term: value
+   36     | value TIMES term
+   37     | value DIVIDE term
+
+   38 value: id
+   39      | constant
+   40      | BRA expression KET
+
+   41 constant: number_constant
+   42         | char_const
+
+   43 number_constant: NUMBER
+   44                | MINUS NUMBER
+   45                | MINUS NUMBER FULL NUMBER
+   46                | NUMBER FULL NUMBER
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+TYPE (258)
+char_const (259) 42
+declaration_block (260) 2
+id (261) 1 13 18 19 20 21 38
+NEWLINE (262) 20
+PLUS (263) 33
+TIMES (264) 36
+MINUS (265) 34 44 45
+DIVIDE (266) 37
+BRA (267) 19 20 21 40
+KET (268) 19 20 21 40
+COLON (269) 1
+SEMICOLON (270) 5
+COMMA (271)
+CAST (272) 13
+EQUALS (273) 26
+GET (274) 27
+LT (275) 28
+GT (276) 29
+GORE (277) 30
+FULL (278) 1 45 46
+APOS (279)
+ASSIGNMENT (280)
+IF (281) 14 15
+ELSE (282) 14
+ENDIF (283) 14 15
+ENDDO (284) 16
+DO (285) 16 17 18
+WHILE (286) 16 17
+ENDWHILE (287) 17
+FOR (288) 18
+ENDFOR (289) 18
+WRITE (290) 19 20
+READ (291) 21
+AND (292) 23
+OR (293) 24
+NOT (294) 25
+BY (295) 18
+CODE (296) 2 3
+ENDP (297) 1
+LORE (298) 31
+INTEGER (299)
+DECLARATIONS (300) 2
+IS (301) 18
+OF (302)
+REAL (303)
+THEN (304) 14 15
+TO (305) 18
+CHARACTER (306)
+NUMBER (307) 43 44 45 46
+
+
+Nonterminals, with rules where they appear
+
+$accept (53)
+    on left: 0
+program (54)
+    on left: 1, on right: 0
+block (55)
+    on left: 2 3, on right: 1
+statement_list (56)
+    on left: 4 5, on right: 2 3 5 14 15 16 17 18
+statement (57)
+    on left: 6 7 8 9 10 11 12, on right: 4 5
+assignment_statement (58)
+    on left: 13, on right: 6
+if_statement (59)
+    on left: 14 15, on right: 7
+do_statement (60)
+    on left: 16, on right: 8
+while_statement (61)
+    on left: 17, on right: 9
+for_statement (62)
+    on left: 18, on right: 10
+write_statement (63)
+    on left: 19 20, on right: 11
+read_statement (64)
+    on left: 21, on right: 12
+conditional (65)
+    on left: 22 23 24 25, on right: 14 15 16 17 23 24 25
+comparator (66)
+    on left: 26 27 28 29 30 31, on right: 22 23 24
+expression (67)
+    on left: 32 33 34, on right: 13 18 22 23 24 33 34 40
+term (68)
+    on left: 35 36 37, on right: 32 33 34 36 37
+value (69)
+    on left: 38 39 40, on right: 35 36 37
+constant (70)
+    on left: 41 42, on right: 39
+number_constant (71)
+    on left: 43 44 45 46, on right: 41
+
+
+state 0
+
+    0 $accept: . program $end
+
+    id  shift, and go to state 1
+
+    program  go to state 2
+
+
+state 1
+
+    1 program: id . COLON block ENDP id FULL
+
+    COLON  shift, and go to state 3
+
+
+state 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 4
+
+
+state 3
+
+    1 program: id COLON . block ENDP id FULL
+
+    CODE          shift, and go to state 5
+    DECLARATIONS  shift, and go to state 6
+
+    block  go to state 7
+
+
+state 4
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 5
+
+    3 block: CODE . statement_list
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    NEWLINE     shift, and go to state 10
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    IF          shift, and go to state 13
+    DO          shift, and go to state 14
+    WHILE       shift, and go to state 15
+    FOR         shift, and go to state 16
+    WRITE       shift, and go to state 17
+    READ        shift, and go to state 18
+    NUMBER      shift, and go to state 19
+
+    statement_list        go to state 20
+    statement             go to state 21
+    assignment_statement  go to state 22
+    if_statement          go to state 23
+    do_statement          go to state 24
+    while_statement       go to state 25
+    for_statement         go to state 26
+    write_statement       go to state 27
+    read_statement        go to state 28
+    expression            go to state 29
+    term                  go to state 30
+    value                 go to state 31
+    constant              go to state 32
+    number_constant       go to state 33
+
+
+state 6
+
+    2 block: DECLARATIONS . declaration_block CODE statement_list
+
+    declaration_block  shift, and go to state 34
+
+
+state 7
+
+    1 program: id COLON block . ENDP id FULL
+
+    ENDP  shift, and go to state 35
+
+
+state 8
+
+   42 constant: char_const .
+
+    $default  reduce using rule 42 (constant)
+
+
+state 9
+
+   38 value: id .
+
+    $default  reduce using rule 38 (value)
+
+
+state 10
+
+   20 write_statement: NEWLINE . WRITE BRA id KET
+
+    WRITE  shift, and go to state 36
+
+
+state 11
+
+   44 number_constant: MINUS . NUMBER
+   45                | MINUS . NUMBER FULL NUMBER
+
+    NUMBER  shift, and go to state 37
+
+
+state 12
+
+   40 value: BRA . expression KET
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NUMBER      shift, and go to state 19
+
+    expression       go to state 38
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 13
+
+   14 if_statement: IF . conditional THEN statement_list ELSE statement_list ENDIF
+   15             | IF . conditional THEN statement_list ENDIF
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NOT         shift, and go to state 39
+    NUMBER      shift, and go to state 19
+
+    conditional      go to state 40
+    expression       go to state 41
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 14
+
+   16 do_statement: DO . statement_list WHILE conditional ENDDO
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    NEWLINE     shift, and go to state 10
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    IF          shift, and go to state 13
+    DO          shift, and go to state 14
+    WHILE       shift, and go to state 15
+    FOR         shift, and go to state 16
+    WRITE       shift, and go to state 17
+    READ        shift, and go to state 18
+    NUMBER      shift, and go to state 19
+
+    statement_list        go to state 42
+    statement             go to state 21
+    assignment_statement  go to state 22
+    if_statement          go to state 23
+    do_statement          go to state 24
+    while_statement       go to state 25
+    for_statement         go to state 26
+    write_statement       go to state 27
+    read_statement        go to state 28
+    expression            go to state 29
+    term                  go to state 30
+    value                 go to state 31
+    constant              go to state 32
+    number_constant       go to state 33
+
+
+state 15
+
+   17 while_statement: WHILE . conditional DO statement_list ENDWHILE
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NOT         shift, and go to state 39
+    NUMBER      shift, and go to state 19
+
+    conditional      go to state 43
+    expression       go to state 41
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 16
+
+   18 for_statement: FOR . id IS expression BY expression TO expression TO expression DO statement_list ENDFOR
+
+    id  shift, and go to state 44
+
+
+state 17
+
+   19 write_statement: WRITE . BRA id KET
+
+    BRA  shift, and go to state 45
+
+
+state 18
+
+   21 read_statement: READ . BRA id KET
+
+    BRA  shift, and go to state 46
+
+
+state 19
+
+   43 number_constant: NUMBER .
+   46                | NUMBER . FULL NUMBER
+
+    FULL  shift, and go to state 47
+
+    $default  reduce using rule 43 (number_constant)
+
+
+state 20
+
+    3 block: CODE statement_list .
+
+    $default  reduce using rule 3 (block)
+
+
+state 21
+
+    4 statement_list: statement .
+    5               | statement . SEMICOLON statement_list
+
+    SEMICOLON  shift, and go to state 48
+
+    $default  reduce using rule 4 (statement_list)
+
+
+state 22
+
+    6 statement: assignment_statement .
+
+    $default  reduce using rule 6 (statement)
+
+
+state 23
+
+    7 statement: if_statement .
+
+    $default  reduce using rule 7 (statement)
+
+
+state 24
+
+    8 statement: do_statement .
+
+    $default  reduce using rule 8 (statement)
+
+
+state 25
+
+    9 statement: while_statement .
+
+    $default  reduce using rule 9 (statement)
+
+
+state 26
+
+   10 statement: for_statement .
+
+    $default  reduce using rule 10 (statement)
+
+
+state 27
+
+   11 statement: write_statement .
+
+    $default  reduce using rule 11 (statement)
+
+
+state 28
+
+   12 statement: read_statement .
+
+    $default  reduce using rule 12 (statement)
+
+
+state 29
+
+   13 assignment_statement: expression . CAST id
+
+    CAST  shift, and go to state 49
+
+
+state 30
+
+   32 expression: term .
+   33           | term . PLUS expression
+   34           | term . MINUS expression
+
+    PLUS   shift, and go to state 50
+    MINUS  shift, and go to state 51
+
+    $default  reduce using rule 32 (expression)
+
+
+state 31
+
+   35 term: value .
+   36     | value . TIMES term
+   37     | value . DIVIDE term
+
+    TIMES   shift, and go to state 52
+    DIVIDE  shift, and go to state 53
+
+    $default  reduce using rule 35 (term)
+
+
+state 32
+
+   39 value: constant .
+
+    $default  reduce using rule 39 (value)
+
+
+state 33
+
+   41 constant: number_constant .
+
+    $default  reduce using rule 41 (constant)
+
+
+state 34
+
+    2 block: DECLARATIONS declaration_block . CODE statement_list
+
+    CODE  shift, and go to state 54
+
+
+state 35
+
+    1 program: id COLON block ENDP . id FULL
+
+    id  shift, and go to state 55
+
+
+state 36
+
+   20 write_statement: NEWLINE WRITE . BRA id KET
+
+    BRA  shift, and go to state 56
+
+
+state 37
+
+   44 number_constant: MINUS NUMBER .
+   45                | MINUS NUMBER . FULL NUMBER
+
+    FULL  shift, and go to state 57
+
+    $default  reduce using rule 44 (number_constant)
+
+
+state 38
+
+   40 value: BRA expression . KET
+
+    KET  shift, and go to state 58
+
+
+state 39
+
+   25 conditional: NOT . conditional
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NOT         shift, and go to state 39
+    NUMBER      shift, and go to state 19
+
+    conditional      go to state 59
+    expression       go to state 41
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 40
+
+   14 if_statement: IF conditional . THEN statement_list ELSE statement_list ENDIF
+   15             | IF conditional . THEN statement_list ENDIF
+
+    THEN  shift, and go to state 60
+
+
+state 41
+
+   22 conditional: expression . comparator expression
+   23            | expression . comparator expression AND conditional
+   24            | expression . comparator expression OR conditional
+
+    EQUALS  shift, and go to state 61
+    GET     shift, and go to state 62
+    LT      shift, and go to state 63
+    GT      shift, and go to state 64
+    GORE    shift, and go to state 65
+    LORE    shift, and go to state 66
+
+    comparator  go to state 67
+
+
+state 42
+
+   16 do_statement: DO statement_list . WHILE conditional ENDDO
+
+    WHILE  shift, and go to state 68
+
+
+state 43
+
+   17 while_statement: WHILE conditional . DO statement_list ENDWHILE
+
+    DO  shift, and go to state 69
+
+
+state 44
+
+   18 for_statement: FOR id . IS expression BY expression TO expression TO expression DO statement_list ENDFOR
+
+    IS  shift, and go to state 70
+
+
+state 45
+
+   19 write_statement: WRITE BRA . id KET
+
+    id  shift, and go to state 71
+
+
+state 46
+
+   21 read_statement: READ BRA . id KET
+
+    id  shift, and go to state 72
+
+
+state 47
+
+   46 number_constant: NUMBER FULL . NUMBER
+
+    NUMBER  shift, and go to state 73
+
+
+state 48
+
+    5 statement_list: statement SEMICOLON . statement_list
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    NEWLINE     shift, and go to state 10
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    IF          shift, and go to state 13
+    DO          shift, and go to state 14
+    WHILE       shift, and go to state 15
+    FOR         shift, and go to state 16
+    WRITE       shift, and go to state 17
+    READ        shift, and go to state 18
+    NUMBER      shift, and go to state 19
+
+    statement_list        go to state 74
+    statement             go to state 21
+    assignment_statement  go to state 22
+    if_statement          go to state 23
+    do_statement          go to state 24
+    while_statement       go to state 25
+    for_statement         go to state 26
+    write_statement       go to state 27
+    read_statement        go to state 28
+    expression            go to state 29
+    term                  go to state 30
+    value                 go to state 31
+    constant              go to state 32
+    number_constant       go to state 33
+
+
+state 49
+
+   13 assignment_statement: expression CAST . id
+
+    id  shift, and go to state 75
+
+
+state 50
+
+   33 expression: term PLUS . expression
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NUMBER      shift, and go to state 19
+
+    expression       go to state 76
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 51
+
+   34 expression: term MINUS . expression
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NUMBER      shift, and go to state 19
+
+    expression       go to state 77
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 52
+
+   36 term: value TIMES . term
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NUMBER      shift, and go to state 19
+
+    term             go to state 78
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 53
+
+   37 term: value DIVIDE . term
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NUMBER      shift, and go to state 19
+
+    term             go to state 79
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 54
+
+    2 block: DECLARATIONS declaration_block CODE . statement_list
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    NEWLINE     shift, and go to state 10
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    IF          shift, and go to state 13
+    DO          shift, and go to state 14
+    WHILE       shift, and go to state 15
+    FOR         shift, and go to state 16
+    WRITE       shift, and go to state 17
+    READ        shift, and go to state 18
+    NUMBER      shift, and go to state 19
+
+    statement_list        go to state 80
+    statement             go to state 21
+    assignment_statement  go to state 22
+    if_statement          go to state 23
+    do_statement          go to state 24
+    while_statement       go to state 25
+    for_statement         go to state 26
+    write_statement       go to state 27
+    read_statement        go to state 28
+    expression            go to state 29
+    term                  go to state 30
+    value                 go to state 31
+    constant              go to state 32
+    number_constant       go to state 33
+
+
+state 55
+
+    1 program: id COLON block ENDP id . FULL
+
+    FULL  shift, and go to state 81
+
+
+state 56
+
+   20 write_statement: NEWLINE WRITE BRA . id KET
+
+    id  shift, and go to state 82
+
+
+state 57
+
+   45 number_constant: MINUS NUMBER FULL . NUMBER
+
+    NUMBER  shift, and go to state 83
+
+
+state 58
+
+   40 value: BRA expression KET .
+
+    $default  reduce using rule 40 (value)
+
+
+state 59
+
+   25 conditional: NOT conditional .
+
+    $default  reduce using rule 25 (conditional)
+
+
+state 60
+
+   14 if_statement: IF conditional THEN . statement_list ELSE statement_list ENDIF
+   15             | IF conditional THEN . statement_list ENDIF
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    NEWLINE     shift, and go to state 10
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    IF          shift, and go to state 13
+    DO          shift, and go to state 14
+    WHILE       shift, and go to state 15
+    FOR         shift, and go to state 16
+    WRITE       shift, and go to state 17
+    READ        shift, and go to state 18
+    NUMBER      shift, and go to state 19
+
+    statement_list        go to state 84
+    statement             go to state 21
+    assignment_statement  go to state 22
+    if_statement          go to state 23
+    do_statement          go to state 24
+    while_statement       go to state 25
+    for_statement         go to state 26
+    write_statement       go to state 27
+    read_statement        go to state 28
+    expression            go to state 29
+    term                  go to state 30
+    value                 go to state 31
+    constant              go to state 32
+    number_constant       go to state 33
+
+
+state 61
+
+   26 comparator: EQUALS .
+
+    $default  reduce using rule 26 (comparator)
+
+
+state 62
+
+   27 comparator: GET .
+
+    $default  reduce using rule 27 (comparator)
+
+
+state 63
+
+   28 comparator: LT .
+
+    $default  reduce using rule 28 (comparator)
+
+
+state 64
+
+   29 comparator: GT .
+
+    $default  reduce using rule 29 (comparator)
+
+
+state 65
+
+   30 comparator: GORE .
+
+    $default  reduce using rule 30 (comparator)
+
+
+state 66
+
+   31 comparator: LORE .
+
+    $default  reduce using rule 31 (comparator)
+
+
+state 67
+
+   22 conditional: expression comparator . expression
+   23            | expression comparator . expression AND conditional
+   24            | expression comparator . expression OR conditional
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NUMBER      shift, and go to state 19
+
+    expression       go to state 85
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 68
+
+   16 do_statement: DO statement_list WHILE . conditional ENDDO
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NOT         shift, and go to state 39
+    NUMBER      shift, and go to state 19
+
+    conditional      go to state 86
+    expression       go to state 41
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 69
+
+   17 while_statement: WHILE conditional DO . statement_list ENDWHILE
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    NEWLINE     shift, and go to state 10
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    IF          shift, and go to state 13
+    DO          shift, and go to state 14
+    WHILE       shift, and go to state 15
+    FOR         shift, and go to state 16
+    WRITE       shift, and go to state 17
+    READ        shift, and go to state 18
+    NUMBER      shift, and go to state 19
+
+    statement_list        go to state 87
+    statement             go to state 21
+    assignment_statement  go to state 22
+    if_statement          go to state 23
+    do_statement          go to state 24
+    while_statement       go to state 25
+    for_statement         go to state 26
+    write_statement       go to state 27
+    read_statement        go to state 28
+    expression            go to state 29
+    term                  go to state 30
+    value                 go to state 31
+    constant              go to state 32
+    number_constant       go to state 33
+
+
+state 70
+
+   18 for_statement: FOR id IS . expression BY expression TO expression TO expression DO statement_list ENDFOR
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NUMBER      shift, and go to state 19
+
+    expression       go to state 88
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 71
+
+   19 write_statement: WRITE BRA id . KET
+
+    KET  shift, and go to state 89
+
+
+state 72
+
+   21 read_statement: READ BRA id . KET
+
+    KET  shift, and go to state 90
+
+
+state 73
+
+   46 number_constant: NUMBER FULL NUMBER .
+
+    $default  reduce using rule 46 (number_constant)
+
+
+state 74
+
+    5 statement_list: statement SEMICOLON statement_list .
+
+    $default  reduce using rule 5 (statement_list)
+
+
+state 75
+
+   13 assignment_statement: expression CAST id .
+
+    $default  reduce using rule 13 (assignment_statement)
+
+
+state 76
+
+   33 expression: term PLUS expression .
+
+    $default  reduce using rule 33 (expression)
+
+
+state 77
+
+   34 expression: term MINUS expression .
+
+    $default  reduce using rule 34 (expression)
+
+
+state 78
+
+   36 term: value TIMES term .
+
+    $default  reduce using rule 36 (term)
+
+
+state 79
+
+   37 term: value DIVIDE term .
+
+    $default  reduce using rule 37 (term)
+
+
+state 80
+
+    2 block: DECLARATIONS declaration_block CODE statement_list .
+
+    $default  reduce using rule 2 (block)
+
+
+state 81
+
+    1 program: id COLON block ENDP id FULL .
+
+    $default  reduce using rule 1 (program)
+
+
+state 82
+
+   20 write_statement: NEWLINE WRITE BRA id . KET
+
+    KET  shift, and go to state 91
+
+
+state 83
+
+   45 number_constant: MINUS NUMBER FULL NUMBER .
+
+    $default  reduce using rule 45 (number_constant)
+
+
+state 84
+
+   14 if_statement: IF conditional THEN statement_list . ELSE statement_list ENDIF
+   15             | IF conditional THEN statement_list . ENDIF
+
+    ELSE   shift, and go to state 92
+    ENDIF  shift, and go to state 93
+
+
+state 85
+
+   22 conditional: expression comparator expression .
+   23            | expression comparator expression . AND conditional
+   24            | expression comparator expression . OR conditional
+
+    AND  shift, and go to state 94
+    OR   shift, and go to state 95
+
+    $default  reduce using rule 22 (conditional)
+
+
+state 86
+
+   16 do_statement: DO statement_list WHILE conditional . ENDDO
+
+    ENDDO  shift, and go to state 96
+
+
+state 87
+
+   17 while_statement: WHILE conditional DO statement_list . ENDWHILE
+
+    ENDWHILE  shift, and go to state 97
+
+
+state 88
+
+   18 for_statement: FOR id IS expression . BY expression TO expression TO expression DO statement_list ENDFOR
+
+    BY  shift, and go to state 98
+
+
+state 89
+
+   19 write_statement: WRITE BRA id KET .
+
+    $default  reduce using rule 19 (write_statement)
+
+
+state 90
+
+   21 read_statement: READ BRA id KET .
+
+    $default  reduce using rule 21 (read_statement)
+
+
+state 91
+
+   20 write_statement: NEWLINE WRITE BRA id KET .
+
+    $default  reduce using rule 20 (write_statement)
+
+
+state 92
+
+   14 if_statement: IF conditional THEN statement_list ELSE . statement_list ENDIF
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    NEWLINE     shift, and go to state 10
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    IF          shift, and go to state 13
+    DO          shift, and go to state 14
+    WHILE       shift, and go to state 15
+    FOR         shift, and go to state 16
+    WRITE       shift, and go to state 17
+    READ        shift, and go to state 18
+    NUMBER      shift, and go to state 19
+
+    statement_list        go to state 99
+    statement             go to state 21
+    assignment_statement  go to state 22
+    if_statement          go to state 23
+    do_statement          go to state 24
+    while_statement       go to state 25
+    for_statement         go to state 26
+    write_statement       go to state 27
+    read_statement        go to state 28
+    expression            go to state 29
+    term                  go to state 30
+    value                 go to state 31
+    constant              go to state 32
+    number_constant       go to state 33
+
+
+state 93
+
+   15 if_statement: IF conditional THEN statement_list ENDIF .
+
+    $default  reduce using rule 15 (if_statement)
+
+
+state 94
+
+   23 conditional: expression comparator expression AND . conditional
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NOT         shift, and go to state 39
+    NUMBER      shift, and go to state 19
+
+    conditional      go to state 100
+    expression       go to state 41
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 95
+
+   24 conditional: expression comparator expression OR . conditional
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NOT         shift, and go to state 39
+    NUMBER      shift, and go to state 19
+
+    conditional      go to state 101
+    expression       go to state 41
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 96
+
+   16 do_statement: DO statement_list WHILE conditional ENDDO .
+
+    $default  reduce using rule 16 (do_statement)
+
+
+state 97
+
+   17 while_statement: WHILE conditional DO statement_list ENDWHILE .
+
+    $default  reduce using rule 17 (while_statement)
+
+
+state 98
+
+   18 for_statement: FOR id IS expression BY . expression TO expression TO expression DO statement_list ENDFOR
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NUMBER      shift, and go to state 19
+
+    expression       go to state 102
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 99
+
+   14 if_statement: IF conditional THEN statement_list ELSE statement_list . ENDIF
+
+    ENDIF  shift, and go to state 103
+
+
+state 100
+
+   23 conditional: expression comparator expression AND conditional .
+
+    $default  reduce using rule 23 (conditional)
+
+
+state 101
+
+   24 conditional: expression comparator expression OR conditional .
+
+    $default  reduce using rule 24 (conditional)
+
+
+state 102
+
+   18 for_statement: FOR id IS expression BY expression . TO expression TO expression DO statement_list ENDFOR
+
+    TO  shift, and go to state 104
+
+
+state 103
+
+   14 if_statement: IF conditional THEN statement_list ELSE statement_list ENDIF .
+
+    $default  reduce using rule 14 (if_statement)
+
+
+state 104
+
+   18 for_statement: FOR id IS expression BY expression TO . expression TO expression DO statement_list ENDFOR
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NUMBER      shift, and go to state 19
+
+    expression       go to state 105
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 105
+
+   18 for_statement: FOR id IS expression BY expression TO expression . TO expression DO statement_list ENDFOR
+
+    TO  shift, and go to state 106
+
+
+state 106
+
+   18 for_statement: FOR id IS expression BY expression TO expression TO . expression DO statement_list ENDFOR
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    NUMBER      shift, and go to state 19
+
+    expression       go to state 107
+    term             go to state 30
+    value            go to state 31
+    constant         go to state 32
+    number_constant  go to state 33
+
+
+state 107
+
+   18 for_statement: FOR id IS expression BY expression TO expression TO expression . DO statement_list ENDFOR
+
+    DO  shift, and go to state 108
+
+
+state 108
+
+   18 for_statement: FOR id IS expression BY expression TO expression TO expression DO . statement_list ENDFOR
+
+    char_const  shift, and go to state 8
+    id          shift, and go to state 9
+    NEWLINE     shift, and go to state 10
+    MINUS       shift, and go to state 11
+    BRA         shift, and go to state 12
+    IF          shift, and go to state 13
+    DO          shift, and go to state 14
+    WHILE       shift, and go to state 15
+    FOR         shift, and go to state 16
+    WRITE       shift, and go to state 17
+    READ        shift, and go to state 18
+    NUMBER      shift, and go to state 19
+
+    statement_list        go to state 109
+    statement             go to state 21
+    assignment_statement  go to state 22
+    if_statement          go to state 23
+    do_statement          go to state 24
+    while_statement       go to state 25
+    for_statement         go to state 26
+    write_statement       go to state 27
+    read_statement        go to state 28
+    expression            go to state 29
+    term                  go to state 30
+    value                 go to state 31
+    constant              go to state 32
+    number_constant       go to state 33
+
+
+state 109
+
+   18 for_statement: FOR id IS expression BY expression TO expression TO expression DO statement_list . ENDFOR
+
+    ENDFOR  shift, and go to state 110
+
+
+state 110
+
+   18 for_statement: FOR id IS expression BY expression TO expression TO expression DO statement_list ENDFOR .
+
+    $default  reduce using rule 18 (for_statement)

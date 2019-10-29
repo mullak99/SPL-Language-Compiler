@@ -1,9 +1,9 @@
-%token TYPE char_const declaration_block id NEWLINE PLUS TIMES MINUS DIVIDE BRA KET COLLON SEMICOLON COMMA CAST EQUALS GET LT GT GORE FULL APOS ASSIGNMENT IF ELSE ENDIF ENDDO DO WHILE ENDWHILE FOR ENDFOR WRITE READ AND OR NOT BY CODE ENDP LORE INTEGER DECLARATIONS IS OF REAL THEN TO 
+%token TYPE char_const declaration_block id NEWLINE PLUS TIMES MINUS DIVIDE BRA KET COLON SEMICOLON COMMA CAST EQUALS GET LT GT GORE FULL APOS ASSIGNMENT IF ELSE ENDIF ENDDO DO WHILE ENDWHILE FOR ENDFOR WRITE READ AND OR NOT BY CODE ENDP LORE INTEGER DECLARATIONS IS OF REAL THEN TO 
 %token CHARACTER 
 %token NUMBER 
 %%
 
-program : id COLLON block ENDP id FULL;
+program : id COLON block ENDP id FULL;
 
 block : DECLARATIONS declaration_block CODE statement_list | CODE statement_list;
 
@@ -40,15 +40,13 @@ conditional : expression comparator expression
 
 comparator : EQUALS | GET | LT | GT | GORE | LORE;
 
-expression : term |term PLUS expression | term MINUS expression;
+expression : term | term PLUS expression | term MINUS expression;
 
 term : value | value TIMES term | value DIVIDE term;
 
 value : id | constant | BRA expression KET;
 
 constant : number_constant | char_const;
-
-charater_constant : APOS CHARACTER APOS;
 
 number_constant : NUMBER | MINUS NUMBER | MINUS NUMBER FULL NUMBER | NUMBER FULL NUMBER;
 

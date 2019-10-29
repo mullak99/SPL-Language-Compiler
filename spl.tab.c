@@ -107,7 +107,7 @@
      DIVIDE = 266,
      BRA = 267,
      KET = 268,
-     COLLON = 269,
+     COLON = 269,
      SEMICOLON = 270,
      COMMA = 271,
      CAST = 272,
@@ -474,7 +474,7 @@ static const yytype_uint8 yyrline[] =
       18,    18,    18,    18,    20,    22,    22,    24,    26,    28,
       30,    30,    32,    36,    37,    38,    39,    41,    41,    41,
       41,    41,    41,    43,    43,    43,    45,    45,    45,    47,
-      47,    47,    49,    49,    53,    53,    53,    53
+      47,    47,    49,    49,    51,    51,    51,    51
 };
 #endif
 
@@ -485,7 +485,7 @@ static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "TYPE", "char_const",
   "declaration_block", "id", "NEWLINE", "PLUS", "TIMES", "MINUS", "DIVIDE",
-  "BRA", "KET", "COLLON", "SEMICOLON", "COMMA", "CAST", "EQUALS", "GET",
+  "BRA", "KET", "COLON", "SEMICOLON", "COMMA", "CAST", "EQUALS", "GET",
   "LT", "GT", "GORE", "FULL", "APOS", "ASSIGNMENT", "IF", "ELSE", "ENDIF",
   "ENDDO", "DO", "WHILE", "ENDWHILE", "FOR", "ENDFOR", "WRITE", "READ",
   "AND", "OR", "NOT", "BY", "CODE", "ENDP", "LORE", "INTEGER",
