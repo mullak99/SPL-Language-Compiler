@@ -31,7 +31,7 @@ write_statement : WRITE BRA id KET | NEWLINE WRITE BRA id KET;
 
 read_statement : READ BRA id KET;
 
-output_list : value |value COMMA output_list;
+output_list : value | value COMMA output_list;
 
 conditional : expression comparator expression
 			| expression comparator expression AND conditional
