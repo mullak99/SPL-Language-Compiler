@@ -1,15 +1,20 @@
-%token TYPE char_const declaration_block id NEWLINE PLUS TIMES MINUS DIVIDE BRA KET COLON SEMICOLON COMMA CAST EQUALS GET LT GT GORE FULL APOS ASSIGNMENT IF ELSE ENDIF ENDDO DO WHILE ENDWHILE FOR ENDFOR WRITE READ AND OR NOT BY CODE ENDP LORE INTEGER DECLARATIONS IS OF REAL THEN TO 
+%{
+int yylex();
+int yyerror();
+%}
+
+%token TYPE CHAR_CONST ID NEWLINE PLUS TIMES MINUS DIVIDE BRA KET COLON SEMICOLON COMMA CAST EQUALS GET LT GT GORE FULL IF ELSE ENDIF ENDDO DO WHILE ENDWHILE FOR ENDFOR WRITE READ AND OR NOT BY CODE ENDP LORE INTEGER DECLARATIONS IS OF REAL THEN TO 
 %token CHARACTER 
 %token NUMBER 
 %%
 
-program : id COLON block ENDP id FULL;
+program : ID COLON block ENDP ID FULL;
 
 block : DECLARATIONS declaration_block CODE statement_list | CODE statement_list;
 
-declaration : variables OF TYPE type SEMICOLON | variables OF TYPE type SEMICOLON declaration_block;
+declaration_block : variables OF TYPE type SEMICOLON | variables OF TYPE type SEMICOLON declaration_block;
 
-variables : id | id COMMA variables;
+variables : ID | ID COMMA variables;
 
 type: CHARACTER | INTEGER | REAL;
 
@@ -17,7 +22,7 @@ statement_list : statement | statement SEMICOLON statement_list;
 
 statement : assignment_statement | if_statement | do_statement| while_statement | for_statement | write_statement | read_statement;
 
-assignment_statement : expression CAST id;
+assignment_statement : expression CAST ID;
 
 if_statement : IF conditional THEN statement_list ELSE statement_list ENDIF | IF conditional THEN statement_list ENDIF;
 
@@ -25,11 +30,11 @@ do_statement : DO statement_list WHILE conditional ENDDO;
 
 while_statement : WHILE conditional DO statement_list ENDWHILE;
 
-for_statement : FOR id IS expression BY expression TO expression TO expression DO statement_list ENDFOR;
+for_statement : FOR ID IS expression BY expression TO expression TO expression DO statement_list ENDFOR;
 
-write_statement : WRITE BRA id KET | NEWLINE WRITE BRA id KET;
+write_statement : WRITE BRA output_list KET | NEWLINE;
 
-read_statement : READ BRA id KET;
+read_statement : READ BRA ID KET;
 
 output_list : value | value COMMA output_list;
 
@@ -44,9 +49,11 @@ expression : term | term PLUS expression | term MINUS expression;
 
 term : value | value TIMES term | value DIVIDE term;
 
-value : id | constant | BRA expression KET;
+value : ID | constant | BRA expression KET;
 
-constant : number_constant | char_const;
+constant : number_const | CHAR_CONST;
 
-number_constant : NUMBER | MINUS NUMBER | MINUS NUMBER FULL NUMBER | NUMBER FULL NUMBER;
+number_const : NUMBER | MINUS NUMBER | MINUS NUMBER FULL NUMBER | NUMBER FULL NUMBER;
 
+%% 
+#include "lex.yy.c" 

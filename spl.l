@@ -6,7 +6,7 @@
 #define ID_TOKEN(t) printf("ID %s Token: " #t "\n", yytext);
 #else
 #define TOKEN(t) return(t);
-#define NUMBER_TOKEN(t) yylval.iVal = atoi(yytext); return(t);
+#define NUMBER_TOKEN(t) /*yylval.iVal = atoi(yytext);*/ return(t);
 #define CHAR_TOKEN(t) return(t);
 #define ID_TOKEN(t) return(t);
 #endif
@@ -32,17 +32,15 @@ char_const      '{character}'
 "<>"			TOKEN(GET);
 ":" 	      	TOKEN(COLON);
 ";"             TOKEN(SEMICOLON);
-"->"			TOKEN(ASSIGNMENT);
 "("             TOKEN(BRA);
 ")"             TOKEN(KET);
-"'"				TOKEN(APOS);
-":="			TOKEN(ASSIGN);
 "." 			TOKEN(FULL);
 "," 			TOKEN(COMMA);
 "=>"			TOKEN(GORE);
 "=<"			TOKEN(LORE);
 "NEWLINE" 		TOKEN(NEWLINE);
 
+DECLARATIONS 	TOKEN(DECLARATIONS);
 IF             	TOKEN(IF);
 ENDIF           TOKEN(ENDIF);
 THEN           	TOKEN(THEN);
