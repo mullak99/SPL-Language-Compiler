@@ -29,6 +29,7 @@ lexer.exe
 flex spl.l
 bison spl.y -v
 gcc -o parser.exe spl.tab.c spl.c -lfl
+parser.exe
 ```
 (Or run 'build_parser.bat')
 
@@ -38,5 +39,6 @@ gcc -o parser.exe spl.tab.c spl.c -lfl
 flex spl.l
 bison spl.y -v
 gcc -o parser.exe spl.tab.c spl.c -lfl -DYYDEBUG
+parser.exe
 ```
 (Or run 'build_parser_debug.bat')
