@@ -27,18 +27,10 @@ gcc -o lexer.exe -DPRINT lex.yy.c -lfl
 ```
 flex spl.l
 bison spl.y -v
-gcc -o parser.exe spl.tab.c spl.c -lfl
+gcc -o parser.exe -DYYDEBUG -UYY_MAIN spl.c spl.tab.c -lfl
 ```
 (Or run 'build_parser.bat')
 
-### Building a Parser (in Debug Mode)
-
-```
-flex spl.l
-bison spl.y -v
-gcc -o parserDebug.exe spl.tab.c spl.c -lfl -DYYDEBUG
-```
-(Or run 'build_parser_debug.bat')
 
 ### Building a Parse Tree
 
