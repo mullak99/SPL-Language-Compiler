@@ -17,7 +17,7 @@ enum ParseTreeNodeType
 	ASSIGNMENT_STATEMENT, IF_STATEMENT, DO_STATEMENT,  WHILE_STATEMENT,
 	FOR_STATEMENT, WRITE_STATEMENT, READ_STATEMENT, OUTPUT_LIST, CONDITIONAL,
 	EXPRESSION, TERM, VALUE, CONST, NUM_CONST, VAL_CONST, ID_VALUE, RELOP,
-	NUMBER_TYPE, CHAR_TYPE, REAL_TYPE, ID_VARIABLE
+	INT_TYPE, CHAR_TYPE, REAL_TYPE, ID_VARIABLE
 };
 
 char *NodeName[] =
@@ -26,7 +26,7 @@ char *NodeName[] =
 	"ASSIGNMENT_STATEMENT", "IF_STATEMENT", "DO_STATEMENT",  "WHILE_STATEMENT",
 	"FOR_STATEMENT", "WRITE_STATEMENT", "READ_STATEMENT", "OUTPUT_LIST", "CONDITIONAL",
 	"EXPRESSION", "TERM", "VALUE", "CONST", "NUM_CONST", "VAL_CONST", "ID_VALUE", "RELOP",
-	"NUMBER_TYPE", "CHAR_TYPE", "REAL_TYPE", "ID_VARIABLE"
+	"INT_TYPE", "CHAR_TYPE", "REAL_TYPE", "ID_VARIABLE"
 };
 
 #ifndef TRUE
@@ -107,11 +107,7 @@ program:
 #ifdef DEBUG
 		PrintTree(ParseTree);
 #endif
-		/*
-		Disabled until WriteCode is in a working state.
-
 		WriteCode(ParseTree);
-		*/
 	};
 
 block:
@@ -147,7 +143,7 @@ variable:
 type:
 	NUMBER
 	{
-		$$ = create_node(NOTHING, NUMBER_TYPE, NULL, NULL, NULL);
+		$$ = create_node(NOTHING, INT_TYPE, NULL, NULL, NULL);
 	};
 	| REAL
 	{
@@ -231,7 +227,6 @@ for_statement:
 	{
 		$$ = create_node(NOTHING, FOR_STATEMENT, $4, $6, $10);
 	};
-
 
 write_statement:
 	WRITE BRA output_list KET
@@ -393,7 +388,7 @@ TERNARY_TREE create_node(int ival, int case_identifier, TERNARY_TREE p1,
 void PrintTree(TERNARY_TREE t)
 {
 	if (t == NULL) return;
-	if (t->item != NOTHING) printf("Item: %d", t->item);
+	if (t->item != NOTHING) printf("Item: %d ", t->item);
 	if (t->nodeIdentifier < 0 || t->nodeIdentifier > sizeof(NodeName))
 		printf("Unknown nodeIdentifier: %d\n", t->nodeIdentifier);
 	else
@@ -406,29 +401,48 @@ void PrintTree(TERNARY_TREE t)
 
 void WriteCode(TERNARY_TREE t)
 {
-	/*if (t == NULL) return;
+	if (t == NULL) return;
 
 	switch(t->nodeIdentifier)
         {
-            case(NEWLINE) :
-			break;
-            case(PLUS) :
-			break;
-            case(EXPR) :
-			break;
-            case(TIMES) :
-			break;
-            case(TERM) :
-			break;
-            case(BRA) :
-			break;
-            case(NUMBER) :
-			break;
+            case(PROGRAM):
+				printf("int main(void) {\n");
+				WriteCode(t->first);
+				printf("}\n");
+				return;
+			case(STATEMENT_LIST):
+				WriteCode(t->first);
+				printf(";\n");
+				WriteCode(t->second);
+				return;
+			case(IF_STATEMENT):
+				printf("if (");
+				WriteCode(t->first);
+				printf(") {\n");
+				WriteCode(t->second);
+				return;
+			case(WHILE_STATEMENT):
+				printf("while (");
+				WriteCode(t->first);
+				printf(") {\n");
+				WriteCode(t->second);
+				return;
+			case(WRITE_STATEMENT):
+				printf("printf(\")");
+				WriteCode(t->first);
+				printf("\");");
+				return;
+			case(ASSIGNMENT_STATEMENT):
+				if (t->item >= 0 && t->item < SYMTABSIZE)
+					printf("%s", symTab[t->item]->identifier);
+				else printf("UnknownIdentifier:%d", t->item);
+				printf(" = ");
+				WriteCode(t->first);
+				return;
         }
-    }
 	WriteCode(t->first);
 	WriteCode(t->second);
-	WriteCode(t->third);*/
+	WriteCode(t->third);
 }
 
 #include "lex.yy.c"

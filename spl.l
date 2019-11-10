@@ -31,14 +31,16 @@ char_const      '{character}'
 "<"             TOKEN(LT);
 ">"             TOKEN(GT);
 "<>"			TOKEN(GET);
+"->"            TOKEN(CAST);
 ":" 	      	TOKEN(COLON);
 ";"             TOKEN(SEMI);
 "("             TOKEN(BRA);
 ")"             TOKEN(KET);
 "." 			TOKEN(FULL);
 "," 			TOKEN(COMMA);
-"=>"			TOKEN(GORE);
-"=<"			TOKEN(LORE);
+">="			TOKEN(GORE);
+"<="			TOKEN(LORE);
+"="             TOKEN(EQUALS);
 "NEWLINE" 		TOKEN(NEWLINE);
 
 DECLARATIONS 	TOKEN(DECLARATIONS);
@@ -59,6 +61,15 @@ WRITE        	TOKEN(WRITE);
 READ			TOKEN(READ);
 CODE			TOKEN(CODE);
 ENDP			TOKEN(ENDP)
+OF              TOKEN(OF);
+TYPE            TOKEN(TYPE);
+BY              TOKEN(BY);
+IS              TOKEN(IS);
+TO              TOKEN(TO);
+
+INTEGER         TOKEN(NUMBER);
+CHARACTER       TOKEN(CHAR_CONST);
+REAL            TOKEN(REAL)
 
 {id}            ID_TOKEN(ID);
 {char_const}    CHAR_TOKEN(CHAR_CONST);
