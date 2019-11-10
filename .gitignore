@@ -7,3 +7,8 @@
 *.output
 *.tab.c
 *.txt
+*.zip
+*.rar
+*.7z
+
+tests/

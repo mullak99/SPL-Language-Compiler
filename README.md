@@ -20,7 +20,6 @@ Tested on Windows 10 x86_64 (MSYS2)
 ```
 flex spl.l
 gcc -o lexer.exe -DPRINT lex.yy.c -lfl
-lexer.exe
 ```
 
 #### Building a Parser
@@ -29,7 +28,6 @@ lexer.exe
 flex spl.l
 bison spl.y -v
 gcc -o parser.exe spl.tab.c spl.c -lfl
-parser.exe
 ```
 (Or run 'build_parser.bat')
 
@@ -38,7 +36,15 @@ parser.exe
 ```
 flex spl.l
 bison spl.y -v
-gcc -o parser.exe spl.tab.c spl.c -lfl -DYYDEBUG
-parser.exe
+gcc -o parserDebug.exe spl.tab.c spl.c -lfl -DYYDEBUG
 ```
 (Or run 'build_parser_debug.bat')
+
+### Building a Parse Tree
+
+```
+flex spl.l
+bison spl.y -v
+gcc -o tree.exe spl.tab.c spl.c -lfl -DDEBUG
+```
+(Or run 'build_print_tree.bat')

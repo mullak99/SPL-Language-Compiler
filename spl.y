@@ -20,6 +20,15 @@ enum ParseTreeNodeType
 	NUMBER_TYPE, CHAR_TYPE, REAL_TYPE, ID_VARIABLE
 };
 
+char *NodeName[] =
+{
+	"PROGRAM", "BLOCK", "DECLARATION_BLOCK", "VARIABLE", "STATEMENT_LIST", "STATEMENT",
+	"ASSIGNMENT_STATEMENT", "IF_STATEMENT", "DO_STATEMENT",  "WHILE_STATEMENT",
+	"FOR_STATEMENT", "WRITE_STATEMENT", "READ_STATEMENT", "OUTPUT_LIST", "CONDITIONAL",
+	"EXPRESSION", "TERM", "VALUE", "CONST", "NUM_CONST", "VAL_CONST", "ID_VALUE", "RELOP",
+	"NUMBER_TYPE", "CHAR_TYPE", "REAL_TYPE", "ID_VARIABLE"
+};
+
 #ifndef TRUE
 #define TRUE 1
 #endif
@@ -49,7 +58,10 @@ typedef TREE_NODE *TERNARY_TREE;
 /* ------------- forward declarations --------------------------- */
 
 TERNARY_TREE create_node(int, int, TERNARY_TREE, TERNARY_TREE, TERNARY_TREE);
+#ifdef DEBUG
 void PrintTree(TERNARY_TREE t);
+#endif
+void WriteCode(TERNARY_TREE t);
 
 /* ------------- symbol table definition --------------------------- */
 
@@ -92,7 +104,14 @@ program:
 	{
 		TERNARY_TREE ParseTree;
 		ParseTree = create_node(NOTHING, PROGRAM, $3, NULL, NULL);
+#ifdef DEBUG
 		PrintTree(ParseTree);
+#endif
+		/*
+		Disabled until WriteCode is in a working state.
+
+		WriteCode(ParseTree);
+		*/
 	};
 
 block:
@@ -358,7 +377,7 @@ number_constant:
 %%
 
 TERNARY_TREE create_node(int ival, int case_identifier, TERNARY_TREE p1,
-	TERNARY_TREE p2, TERNARY_TREE p3)
+						TERNARY_TREE p2, TERNARY_TREE p3)
 {
 	TERNARY_TREE t;
 	t = (TERNARY_TREE)malloc(sizeof(TREE_NODE));
@@ -370,14 +389,46 @@ TERNARY_TREE create_node(int ival, int case_identifier, TERNARY_TREE p1,
 	return (t);
 }
 
+#ifdef DEBUG
 void PrintTree(TERNARY_TREE t)
 {
-   if (t == NULL) return;
-   printf("Item: %d", t->item);
-   printf(" - nodeIdentifier: %d\n", t->nodeIdentifier);
-   PrintTree(t->first);
-   PrintTree(t->second);
-   PrintTree(t->third);
+	if (t == NULL) return;
+	if (t->item != NOTHING) printf("Item: %d", t->item);
+	if (t->nodeIdentifier < 0 || t->nodeIdentifier > sizeof(NodeName))
+		printf("Unknown nodeIdentifier: %d\n", t->nodeIdentifier);
+	else
+		printf("nodeIdentifier: %s\n", NodeName[t->nodeIdentifier]);
+	PrintTree(t->first);
+	PrintTree(t->second);
+	PrintTree(t->third);
+}
+#endif
+
+void WriteCode(TERNARY_TREE t)
+{
+	/*if (t == NULL) return;
+
+	switch(t->nodeIdentifier)
+        {
+            case(NEWLINE) :
+			break;
+            case(PLUS) :
+			break;
+            case(EXPR) :
+			break;
+            case(TIMES) :
+			break;
+            case(TERM) :
+			break;
+            case(BRA) :
+			break;
+            case(NUMBER) :
+			break;
+        }
+    }
+	WriteCode(t->first);
+	WriteCode(t->second);
+	WriteCode(t->third);*/
 }
 
 #include "lex.yy.c"
