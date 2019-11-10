@@ -9,6 +9,11 @@
 #define NUMBER_TOKEN(t) yylval.iVal = atoi(yytext); return(t);
 #define CHAR_TOKEN(t) return(t);
 #define ID_TOKEN(t) yylval.iVal = installId(yytext); return(t);
+
+#include <string.h>
+extern SYMTABNODEPTR symTab[SYMTABSIZE];
+extern int currentSymTabSize;
+int installId(char *);
 #endif
 %}
 
