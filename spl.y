@@ -388,7 +388,13 @@ TERNARY_TREE create_node(int ival, int case_identifier, TERNARY_TREE p1,
 void PrintTree(TERNARY_TREE t)
 {
 	if (t == NULL) return;
-	if (t->item != NOTHING) printf("Item: %d ", t->item);
+	if (t->item != NOTHING)
+	{
+		if (t->nodeIdentifier == VARIABLE)
+			printf("Number: %d | ", t->item);
+		else
+			printf("Unknown Item: %d | ", t->item);
+	}
 	if (t->nodeIdentifier < 0 || t->nodeIdentifier > sizeof(NodeName))
 		printf("Unknown nodeIdentifier: %d\n", t->nodeIdentifier);
 	else
