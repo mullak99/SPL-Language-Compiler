@@ -6,9 +6,9 @@
 #define ID_TOKEN(t) printf("ID %s Token: " #t "\n", yytext);
 #else
 #define TOKEN(t) return(t);
-#define NUMBER_TOKEN(t) /*yylval.iVal = atoi(yytext);*/ return(t);
+#define NUMBER_TOKEN(t) yylval.iVal = atoi(yytext); return(t);
 #define CHAR_TOKEN(t) return(t);
-#define ID_TOKEN(t) return(t);
+#define ID_TOKEN(t) yylval.iVal = installId(yytext); return(t);
 #endif
 %}
 
@@ -19,6 +19,7 @@ digit           [0-9]
 id			    {character}({character}|{digit})*
 number          {digit}+
 char_const      '{character}'
+
 %%
 
 {ws}            ; /* Do Nothing */
@@ -31,7 +32,7 @@ char_const      '{character}'
 ">"             TOKEN(GT);
 "<>"			TOKEN(GET);
 ":" 	      	TOKEN(COLON);
-";"             TOKEN(SEMICOLON);
+";"             TOKEN(SEMI);
 "("             TOKEN(BRA);
 ")"             TOKEN(KET);
 "." 			TOKEN(FULL);
@@ -62,3 +63,46 @@ ENDP			TOKEN(ENDP)
 {id}            ID_TOKEN(ID);
 {char_const}    CHAR_TOKEN(CHAR_CONST);
 {number}		NUMBER_TOKEN(NUMBER);
+
+%%
+
+#ifndef PRINT
+SYMTABNODEPTR newSymTabNode()
+{
+    return ((SYMTABNODEPTR)malloc(sizeof(SYMTABNODE)));
+}
+
+int lookup(char *s)
+{
+    extern SYMTABNODEPTR symTab[SYMTABSIZE];
+    extern int currentSymTabSize;
+    int i;
+
+    for (i = 0; i < currentSymTabSize; i++)
+    {
+		if (strncmp(s,symTab[i]->identifier,IDLENGTH) == 0)
+            return (i);
+    }
+    return (-1);
+}
+
+int installId(char *id)
+{
+    extern SYMTABNODEPTR symTab[SYMTABSIZE];
+    extern int currentSymTabSize;
+    int index;
+
+    index = lookup(id);
+    if (index >= 0)
+        return (index);
+    else if (currentSymTabSize >= SYMTABSIZE)
+        return (NOTHING);
+    else
+    {
+       symTab[currentSymTabSize] = newSymTabNode();
+       strncpy(symTab[currentSymTabSize]->identifier,id,IDLENGTH);
+       symTab[currentSymTabSize]->identifier[IDLENGTH-1] = '\0';
+       return(currentSymTabSize++);
+    }
+}
+#endif
