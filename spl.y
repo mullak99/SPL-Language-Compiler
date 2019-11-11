@@ -411,7 +411,7 @@ void WriteCode(TERNARY_TREE t)
 
 	switch(t->nodeIdentifier)
         {
-            case(PROGRAM):
+			case(PROGRAM):
 				printf("int main(void) {\n");
 				WriteCode(t->first);
 				printf("}\n");
