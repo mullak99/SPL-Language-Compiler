@@ -19,7 +19,7 @@ Tested on Windows 10 x86_64 (MSYS2)
 
 ```
 flex spl.l
-gcc -o lexer.exe -DPRINT lex.yy.c -lfl
+gcc -o splc-lexer.exe -DPRINT lex.yy.c -lfl
 ```
 (Or run 'build_printing_lexer.bat')
 
@@ -27,8 +27,8 @@ gcc -o lexer.exe -DPRINT lex.yy.c -lfl
 
 ```
 flex spl.l
-bison spl.y -v
-gcc -o parser.exe -DYYDEBUG -UYY_MAIN spl.c spl.tab.c -lfl
+bison spl.y
+gcc -o splc-parser.exe -DYYDEBUG -UYY_MAIN spl.c spl.tab.c -lfl
 ```
 (Or run 'build_parser.bat')
 
@@ -37,8 +37,8 @@ gcc -o parser.exe -DYYDEBUG -UYY_MAIN spl.c spl.tab.c -lfl
 
 ```
 flex spl.l
-bison spl.y -v
-gcc -o tree.exe spl.tab.c spl.c -lfl -DDEBUG
+bison spl.y
+gcc -o splc-tree.exe spl.tab.c spl.c -lfl -DDEBUG
 ```
 (Or run 'build_print_tree.bat')
 
@@ -46,8 +46,8 @@ gcc -o tree.exe spl.tab.c spl.c -lfl -DDEBUG
 
 ```
 flex spl.l
-bison spl.y -v
-gcc -o codegen.exe spl.tab.c spl.c -lfl
+bison spl.y
+gcc -o splc.exe spl.tab.c spl.c -lfl
 ```
 (Or run 'build_codegen.bat')
 
