@@ -1,3 +1,3 @@
 @echo off
 flex spl.l
-gcc -o lexer.exe -DPRINT lex.yy.c -lfl
+gcc -o splc-lexer.exe -DPRINT lex.yy.c -lfl

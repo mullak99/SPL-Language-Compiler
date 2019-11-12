@@ -2,11 +2,11 @@
 call build_codegen.bat
 rmdir /s /q tests\codegen-debug-output 2>nul
 md tests\codegen-debug-output
-codegen.exe < examples\a.spl > tests\codegen-debug-output\a.spl-codegen.c
-codegen.exe < examples\b.spl > tests\codegen-debug-output\b.spl-codegen.c
-codegen.exe < examples\c.spl > tests\codegen-debug-output\c.spl-codegen.c
-codegen.exe < examples\d.spl > tests\codegen-debug-output\d.spl-codegen.c
-codegen.exe < examples\e.spl > tests\codegen-debug-output\e.spl-codegen.c
+splc.exe < examples\a.spl > tests\codegen-debug-output\a.spl-codegen.c
+splc.exe < examples\b.spl > tests\codegen-debug-output\b.spl-codegen.c
+splc.exe < examples\c.spl > tests\codegen-debug-output\c.spl-codegen.c
+splc.exe < examples\d.spl > tests\codegen-debug-output\d.spl-codegen.c
+splc.exe < examples\e.spl > tests\codegen-debug-output\e.spl-codegen.c
 
 gcc -o tests\codegen-debug-output\a.exe tests\codegen-debug-output\a.spl-codegen.c
 gcc -o tests\codegen-debug-output\b.exe tests\codegen-debug-output\b.spl-codegen.c

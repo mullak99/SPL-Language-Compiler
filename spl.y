@@ -139,7 +139,7 @@ variable:
 	}
 	| ID COMMA variable
 	{
-		$$ = create_node($1, VARIABLE, NULL, NULL, $3);
+		$$ = create_node($1, VARIABLE, $3, NULL, NULL);
 	};
 
 type:
@@ -243,7 +243,7 @@ write_statement:
 read_statement:
 	READ BRA ID KET
 	{
-		$$ = create_node(NOTHING, READ_STATEMENT, NULL, NULL, NULL);
+		$$ = create_node($3, READ_STATEMENT, NULL, NULL, NULL);
 	};
 
 output_list:
@@ -356,7 +356,7 @@ constant:
 number_constant:
 	NUMBER
 	{
-		$$ = create_node($1, NUM_CONST,  NULL, NULL, NULL);
+		$$ = create_node($1, NUM_CONST, NULL, NULL, NULL);
 	};
 	| MINUS NUMBER
 	{
@@ -393,11 +393,13 @@ void PrintTree(TERNARY_TREE t)
 	if (t->item != NOTHING)
 	{
 		if (t->nodeIdentifier == VARIABLE)
-			printf("Number: %d | ", t->item);
+			printf("ID: %s | ", symTab[t->item]);
 		else if (t->nodeIdentifier == CONST)
 			printf("Char: %c | ", t->item);
 		else
-			printf("Unknown Item: %d | ", t->item);
+		{
+			printf("Unknown Item: %d, ", t->item);
+		}
 	}
 	if (t->nodeIdentifier < 0 || t->nodeIdentifier > sizeof(NodeName))
 		printf("Unknown nodeIdentifier: %d\n", t->nodeIdentifier);
@@ -416,7 +418,7 @@ void WriteCode(TERNARY_TREE t)
         {
 			case(PROGRAM):
 				printf("#include <stdio.h>\n\n");
-				printf("int main(void) {\n");
+				printf("int main(void)\n{\n");
 				WriteCode(t->first);
 				printf("}\n");
 				return;
@@ -426,9 +428,104 @@ void WriteCode(TERNARY_TREE t)
 				else WriteCode(t->first);
 				printf("\");\n");
 				return;
+			case(READ_STATEMENT):
+				printf("scanf(\"%%d\", &");
+				printf("%s", symTab[t->item]);
+				printf(");\n");
+				return;
+			case(IF_STATEMENT):
+				printf("if (");
+				if (t->first != NULL) WriteCode(t->first);
+				printf(")\n{\n");
+				if (t->second != NULL) WriteCode(t->second);
+				printf("}\n");
+				if (t->third != NULL)
+				{
+					printf("else\n{\n");
+					WriteCode(t->third);
+					printf("}\n");
+				}
+				return;
 			case(CONST):
 				if (t->first == NULL) printf("%c", t->item);
 				else WriteCode(t->first);
+				return;
+			case(VARIABLE):
+				printf("%s", symTab[t->item]);
+				if (t->first != NULL)
+				{
+					printf(", ");
+					WriteCode(t->first);
+				}
+				return;
+			case(INT_TYPE):
+				printf("int ");
+				return;
+			case(REAL_TYPE):
+				printf("float ");
+				return;
+			case(CHAR_TYPE):
+				printf("char* ");
+				return;
+			case(DECLARATION_BLOCK):
+				WriteCode(t->second);
+				WriteCode(t->first);
+				printf(";\n");
+				if (t->third != NULL) WriteCode(t->third);
+				return;
+			case(CONDITIONAL):
+				WriteCode(t->first);
+				WriteCode(t->second);
+				WriteCode(t->third);
+				return;
+			case(RELOP):
+				switch (t->nodeIdentifier)
+				{
+					case(EQUALS):
+						printf(" = ");
+						return;
+					case(GET):
+						printf(" <> ");
+						return;
+					case(LT):
+						printf(" < ");
+						return;
+					case(GT):
+						printf(" > ");
+						return;
+					case(LORE):
+						printf(" <= ");
+						return;
+					case(GORE):
+						printf(" >= ");
+						return;
+				}
+				return;
+			case(EXPRESSION):
+				WriteCode(t->first);
+				switch (t->nodeIdentifier)
+				{
+					case(PLUS):
+						printf(" + ");
+						return;
+					case(MINUS):
+						printf(" - ");
+						return;
+				}
+				if (t->second != NULL) WriteCode(t->second);
+				return;
+			case(TERM):
+				WriteCode(t->first);
+				switch (t->nodeIdentifier)
+				{
+					case(TIMES):
+						printf(" * ");
+						return;
+					case(DIVIDE):
+						printf(" / ");
+						return;
+				}
+				if (t->second != NULL) WriteCode(t->second);
 				return;
         }
 	WriteCode(t->first);
