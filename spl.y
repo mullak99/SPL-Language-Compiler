@@ -60,8 +60,9 @@ typedef TREE_NODE *TERNARY_TREE;
 TERNARY_TREE create_node(int, int, TERNARY_TREE, TERNARY_TREE, TERNARY_TREE);
 #ifdef DEBUG
 void PrintTree(TERNARY_TREE t);
-#endif
+#else
 void WriteCode(TERNARY_TREE t);
+#endif
 
 /* ------------- symbol table definition --------------------------- */
 
@@ -106,8 +107,9 @@ program:
 		ParseTree = create_node(NOTHING, PROGRAM, $3, NULL, NULL);
 #ifdef DEBUG
 		PrintTree(ParseTree);
-#endif
+#else
 		WriteCode(ParseTree);
+#endif
 	};
 
 block:
@@ -143,15 +145,15 @@ variable:
 type:
 	NUMBER
 	{
-		$$ = create_node(NOTHING, INT_TYPE, NULL, NULL, NULL);
+		$$ = create_node($1, INT_TYPE, NULL, NULL, NULL);
 	};
 	| REAL
 	{
-		$$ = create_node(NOTHING, REAL_TYPE, NULL, NULL, NULL);
+		$$ = create_node($1, REAL_TYPE, NULL, NULL, NULL);
 	};
 	| CHAR_CONST
 	{
-		$$ = create_node(NOTHING, CHAR_TYPE, NULL, NULL, NULL);
+		$$ = create_node($1, CHAR_TYPE, NULL, NULL, NULL);
 	};
 
 statement_list:
@@ -171,27 +173,27 @@ statement:
 	}
 	| if_statement
 	{
-		$$ = create_node(NOTHING, IF_STATEMENT, $1, NULL, NULL);
+		$$ = create_node(NOTHING, STATEMENT, $1, NULL, NULL);
 	}
 	| do_statement
 	{
-	    $$ = create_node(NOTHING, DO_STATEMENT, $1, NULL, NULL);
+	    $$ = create_node(NOTHING, STATEMENT, $1, NULL, NULL);
 	}
 	| while_statement
 	{
-		$$ = create_node(NOTHING, WHILE_STATEMENT, $1, NULL, NULL);
+		$$ = create_node(NOTHING, STATEMENT, $1, NULL, NULL);
 	}
 	| for_statement
 	{
-	    $$ = create_node(NOTHING, FOR_STATEMENT, $1, NULL, NULL);
+	    $$ = create_node(NOTHING, STATEMENT, $1, NULL, NULL);
 	}
 	| write_statement
 	{
-		$$ = create_node(NOTHING, WRITE_STATEMENT, $1, NULL, NULL);
+		$$ = create_node(NOTHING, STATEMENT, $1, NULL, NULL);
 	}
 	| read_statement
 	{
-	    $$ = create_node(NOTHING, READ_STATEMENT, $1, NULL, NULL);
+	    $$ = create_node(NOTHING, STATEMENT, $1, NULL, NULL);
 	};
 
 assignment_statement:
@@ -247,11 +249,11 @@ read_statement:
 output_list:
 	value
 	{
-		$$ = create_node(NOTHING, OUTPUT_LIST, NULL, NULL, NULL);
+		$$ = create_node(NOTHING, OUTPUT_LIST, $1, NULL, NULL);
 	}
 	| value COMMA output_list
 	{
-		$$ = create_node(NOTHING, OUTPUT_LIST, $3, NULL, NULL);
+		$$ = create_node(NOTHING, OUTPUT_LIST, $1, $3, NULL);
 	};
 
 conditional:
@@ -348,7 +350,7 @@ constant:
 	};
 	| CHAR_CONST
 	{
-		$$ = create_node(NOTHING, CONST, NULL, NULL, NULL);
+		$$ = create_node($1, CONST, NULL, NULL, NULL);
 	};
 
 number_constant:
@@ -358,11 +360,11 @@ number_constant:
 	};
 	| MINUS NUMBER
 	{
-		$$ = create_node(NOTHING, NUM_CONST, NULL, NULL, NULL);
+		$$ = create_node($2, NUM_CONST, NULL, NULL, NULL);
 	};
 	| MINUS NUMBER FULL NUMBER
 	{
-		$$ = create_node(NOTHING, NUM_CONST, NULL, NULL, NULL);
+		$$ = create_node($2, NUM_CONST, NULL, NULL, NULL);
 	};
 	| NUMBER FULL NUMBER
 	{
@@ -392,6 +394,8 @@ void PrintTree(TERNARY_TREE t)
 	{
 		if (t->nodeIdentifier == VARIABLE)
 			printf("Number: %d | ", t->item);
+		else if (t->nodeIdentifier == CONST)
+			printf("Char: %c | ", t->item);
 		else
 			printf("Unknown Item: %d | ", t->item);
 	}
@@ -403,8 +407,7 @@ void PrintTree(TERNARY_TREE t)
 	PrintTree(t->second);
 	PrintTree(t->third);
 }
-#endif
-
+#else
 void WriteCode(TERNARY_TREE t)
 {
 	if (t == NULL) return;
@@ -412,43 +415,26 @@ void WriteCode(TERNARY_TREE t)
 	switch(t->nodeIdentifier)
         {
 			case(PROGRAM):
+				printf("#include <stdio.h>\n\n");
 				printf("int main(void) {\n");
 				WriteCode(t->first);
 				printf("}\n");
 				return;
-			case(STATEMENT_LIST):
-				WriteCode(t->first);
-				printf(";\n");
-				WriteCode(t->second);
-				return;
-			case(IF_STATEMENT):
-				printf("if (");
-				WriteCode(t->first);
-				printf(") {\n");
-				WriteCode(t->second);
-				return;
-			case(WHILE_STATEMENT):
-				printf("while (");
-				WriteCode(t->first);
-				printf(") {\n");
-				WriteCode(t->second);
-				return;
 			case(WRITE_STATEMENT):
-				printf("printf(\")");
-				WriteCode(t->first);
-				printf("\");");
+				printf("printf(\"");
+				if (t->first == NULL) printf("\\n");
+				else WriteCode(t->first);
+				printf("\");\n");
 				return;
-			case(ASSIGNMENT_STATEMENT):
-				if (t->item >= 0 && t->item < SYMTABSIZE)
-					printf("%s", symTab[t->item]->identifier);
-				else printf("UnknownIdentifier:%d", t->item);
-				printf(" = ");
-				WriteCode(t->first);
+			case(CONST):
+				if (t->first == NULL) printf("%c", t->item);
+				else WriteCode(t->first);
 				return;
         }
 	WriteCode(t->first);
 	WriteCode(t->second);
 	WriteCode(t->third);
 }
+#endif
 
 #include "lex.yy.c"

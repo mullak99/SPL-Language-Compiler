@@ -7,7 +7,7 @@
 #else
 #define TOKEN(t) return(t);
 #define NUMBER_TOKEN(t) yylval.iVal = atoi(yytext); return(t);
-#define CHAR_TOKEN(t) return(t);
+#define CHAR_TOKEN(t) yylval.iVal = yytext[1]; return(t);
 #define ID_TOKEN(t) yylval.iVal = installId(yytext); return(t);
 
 #include <string.h>
